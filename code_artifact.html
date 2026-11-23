@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>《那夏，我在安靜中盛開》 - 游昕嬡</title>
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Google Fonts: Noto Serif TC for elegant Traditional Chinese typography -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@300;400;500;700&display=swap" rel="stylesheet">
+
+    <style>
+        /* Base styles and Typography */
+        body, html {
+            margin: 0;
+            padding: 0;
+            font-family: 'Noto Serif TC', serif;
+            background-color: #0f172a;
+            color: #f8fafc;
+            overflow-x: hidden;
+            scroll-behavior: smooth;
+        }
+
+        /* Reading Progress Bar */
+        #progress-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: rgba(255, 255, 255, 0.1);
+            z-index: 1000;
+        }
+        #progress-bar {
+            height: 100%;
+            background: linear-gradient(90deg, #fbbf24, #f59e0b, #d97706);
+            width: 0%;
+            transition: width 0.1s ease-out;
+            box-shadow: 0 0 10px rgba(245, 158, 11, 0.5);
+        }
+
+        /* Parallax Background Sections */
+        .parallax-section {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            background-attachment: fixed;
+            background-position: center;
+            background-repeat: no-repeat;
+            background-size: cover;
+            padding: 2rem 1rem;
+        }
+
+        /* Image Overlays for better text readability */
+        .parallax-section::before {
+            content: '';
+            position: absolute;
+            top: 0; right: 0; bottom: 0; left: 0;
+            background: rgba(0, 0, 0, 0.4);
+            z-index: 1;
+        }
+
+        /* Glassmorphism Container */
+        .glass-panel {
+            position: relative;
+            z-index: 2;
+            background: rgba(15, 23, 42, 0.65);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            border-radius: 1rem;
+            padding: 3rem 2rem;
+            max-width: 800px;
+            width: 100%;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+        }
+
+        @media (min-width: 768px) {
+            .glass-panel {
+                padding: 4rem;
+            }
+        }
+
+        /* Scroll Reveal Animations */
+        .reveal {
+            opacity: 0;
+            transform: translateY(40px);
+            transition: opacity 1s cubic-bezier(0.25, 0.46, 0.45, 0.94), 
+                        transform 1s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        }
+        
+        .reveal.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Ambient Canvas overlay */
+        #ambient-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            pointer-events: none;
+            z-index: 10;
+        }
+
+        /* Custom Text Spacing */
+        .text-reading {
+            line-height: 2.2;
+            letter-spacing: 0.05em;
+        }
+
+        /* Section Backgrounds */
+        #hero { background-image: url('https://images.unsplash.com/photo-1472214103451-9374bd1c798e?auto=format&fit=crop&w=1920&q=80'); } /* Sunset landscape */
+        #section1 { background-image: url('https://images.unsplash.com/photo-1456953180671-730de08edaa7?auto=format&fit=crop&w=1920&q=80'); } /* Desk/Dusk */
+        #section2 { background-image: url('https://images.unsplash.com/photo-1491841550275-ad7854e35ca6?auto=format&fit=crop&w=1920&q=80'); } /* Open Book/Warm light */
+        #section3 { background-image: url('https://images.unsplash.com/photo-1462275646964-a0e3386b89fa?auto=format&fit=crop&w=1920&q=80'); } /* Blooming flower */
+        #section4 { background-image: url('https://images.unsplash.com/photo-1470071459604-3b5ec3a7fe05?auto=format&fit=crop&w=1920&q=80'); } /* Serene dawn/mountains */
+    </style>
+</head>
+<body>
+
+    <!-- Progress Bar -->
+    <div id="progress-container">
+        <div id="progress-bar"></div>
+    </div>
+
+    <!-- Ambient Fireflies / Dust Particles -->
+    <canvas id="ambient-canvas"></canvas>
+
+    <!-- Hero Section -->
+    <section id="hero" class="parallax-section">
+        <div class="glass-panel text-center reveal active">
+            <h3 class="text-sm md:text-lg text-amber-200 tracking-[0.2em] mb-4 uppercase">游昕嬡・散文作品</h3>
+            <h1 class="text-4xl md:text-6xl font-bold mb-6 leading-tight tracking-widest text-white drop-shadow-lg">
+                《那夏，我在安靜中盛開》
+            </h1>
+            <div class="w-16 h-1 bg-amber-400 mx-auto rounded-full mb-8 opacity-70"></div>
+            <p class="text-gray-300 text-lg tracking-widest italic">
+                一場屬於自己的夏夜長跑...
+            </p>
+            
+            <div class="mt-12 animate-bounce opacity-70">
+                <svg class="w-6 h-6 mx-auto text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 14l-7 7m0 0l-7-7m7 7V3"></path>
+                </svg>
+            </div>
+        </div>
+    </section>
+
+    <!-- Paragraph 1 -->
+    <section id="section1" class="parallax-section">
+        <div class="glass-panel reveal">
+            <p class="text-lg md:text-xl text-reading text-gray-100 text-justify">
+                暑假總是與烈日、蟬鳴，以及揮之不去的炎熱聯繫在一起。然而，進入國三前的這個暑假，空氣中除了燥熱，更多了一份看不見的沉重。面對即將到來的會考，身邊的同學紛紛奔波於各個補習班之間，神情焦慮；而我，則選擇在書桌前，展開一場屬於自己的夏夜長跑。
+            </p>
+        </div>
+    </section>
+
+    <!-- Paragraph 2 -->
+    <section id="section2" class="parallax-section">
+        <div class="glass-panel reveal">
+            <p class="text-lg md:text-xl text-reading text-gray-100 text-justify">
+                起初，這份安靜令人窒息。看著窗外逐漸隱沒的夕陽，聽著遠方傳來的汽機車喧囂，內心難免浮動。繁重的複習講義堆疊如山，每一個解不開的數學公式、記不住的歷史年代，都像是一顆顆突兀的石頭，阻擋在未來的道路上。我曾質疑，在這個本該揮灑汗水的青春季節裡，將自己關在房裡苦讀，是否辜負了韶華？
+            </p>
+        </div>
+    </section>
+
+    <!-- Paragraph 3 -->
+    <section id="section3" class="parallax-section">
+        <div class="glass-panel reveal">
+            <p class="text-lg md:text-xl text-reading text-gray-100 text-justify">
+                然而，隨著日子一天天過去，我逐漸在規律的作息與文字的陪伴中，找到了一股沉靜的力量。晨光熹微時，我與古文名篇對話；夜深人靜之際，我與幾何圖形搏鬥。原本枯燥的題目，漸漸變成了通往知識殿堂的階梯。我開始明白，這段看似孤獨的時光，並非一種懲罰，而是一次深刻的自我梳理。就像花朵在綻放之前，必須在黑暗的土壤裡沉潛吸取養分；這一段沉靜的暑假，正是為了讓我在明年的春季，綻放出最耀眼的光芒。
+            </p>
+        </div>
+    </section>
+
+    <!-- Paragraph 4 -->
+    <section id="section4" class="parallax-section">
+        <div class="glass-panel reveal">
+            <p class="text-lg md:text-xl text-reading text-gray-100 text-justify mb-8">
+                國三的暑假，沒有遠方的風景，卻有心靈的深度。這段在安靜中努力的歲月，讓我學會了耐得住寂寞，也懂得了為目標堅持的意義。暑假終將結束，但這份在孤獨中積蓄的力量，將成為我迎向挑戰時，最堅實的後盾。
+            </p>
+            <div class="mt-8 text-right text-amber-200/80 text-sm tracking-widest">
+                — 游昕嬡 筆
+            </div>
+        </div>
+    </section>
+
+    <!-- JavaScript for Interactivity -->
+    <script>
+        // 1. Reading Progress Bar
+        window.addEventListener('scroll', () => {
+            const winScroll = document.body.scrollTop || document.documentElement.scrollTop;
+            const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+            const scrolled = (winScroll / height) * 100;
+            document.getElementById("progress-bar").style.width = scrolled + "%";
+        });
+
+        // 2. Intersection Observer for Scroll Animations
+        const observerOptions = {
+            root: null,
+            rootMargin: '0px',
+            threshold: 0.25 // Trigger when 25% of the element is visible
+        };
+
+        const observer = new IntersectionObserver((entries, observer) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('active');
+                    // Optional: Unobserve after revealing to keep the element visible
+                    // observer.unobserve(entry.target); 
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.reveal').forEach((element) => {
+            observer.observe(element);
+        });
+
+        // 3. Ambient Animations (Fireflies / Dust Particles)
+        const canvas = document.getElementById('ambient-canvas');
+        const ctx = canvas.getContext('2d');
+        
+        let width, height, particles = [];
+        
+        function initCanvas() {
+            width = canvas.width = window.innerWidth;
+            height = canvas.height = window.innerHeight;
+            createParticles();
+        }
+
+        class Particle {
+            constructor() {
+                this.x = Math.random() * width;
+                this.y = Math.random() * height;
+                this.size = Math.random() * 2 + 0.5;
+                this.speedX = Math.random() * 0.5 - 0.25;
+                this.speedY = Math.random() * 0.5 - 0.25;
+                this.opacity = Math.random() * 0.5 + 0.1;
+                this.fadeSpeed = Math.random() * 0.005 + 0.001;
+                this.fadeDir = Math.random() > 0.5 ? 1 : -1;
+            }
+
+            update() {
+                this.x += this.speedX;
+                this.y -= this.speedY; // Float slightly upwards
+
+                // Opacity pulsing
+                this.opacity += this.fadeSpeed * this.fadeDir;
+                if (this.opacity >= 0.8) this.fadeDir = -1;
+                if (this.opacity <= 0.1) this.fadeDir = 1;
+
+                // Screen wrap
+                if (this.x < 0) this.x = width;
+                if (this.x > width) this.x = 0;
+                if (this.y < 0) this.y = height;
+                if (this.y > height) this.y = 0;
+            }
+
+            draw() {
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                ctx.fillStyle = `rgba(255, 230, 150, ${this.opacity})`; // Warm firefly color
+                ctx.fill();
+            }
+        }
+
+        function createParticles() {
+            particles = [];
+            const particleCount = Math.floor((width * height) / 15000); // Responsive particle count
+            for (let i = 0; i < particleCount; i++) {
+                particles.push(new Particle());
+            }
+        }
+
+        function animate() {
+            ctx.clearRect(0, 0, width, height);
+            for (let i = 0; i < particles.length; i++) {
+                particles[i].update();
+                particles[i].draw();
+            }
+            requestAnimationFrame(animate);
+        }
+
+        // Initialize and handle resize
+        window.addEventListener('resize', initCanvas);
+        initCanvas();
+        animate();
+    </script>
+</body>
+</html>
